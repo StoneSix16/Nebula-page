@@ -1,0 +1,210 @@
+---
+title: 'Nebula: Infinite-Scale 3D Gaussian Splatting in Virtual Reality via Collaborative Rendering and Accelerated Stereo Rasterization'
+authors:
+  - name: He Zhu
+    notes: ["1"]
+  - name: Zheng Liu
+    notes: ["1"]
+  - name: Xingyang Li
+    notes: ["1"]
+  - name: Anbang Wu
+    notes: ["1"]
+  - name: Jieru Zhao
+    notes: ["1"]
+  - name: Fangxin Liu
+    notes: ["1"]
+  - name: Yiming Gan 
+    notes: ["3"]
+  - name: Jingwen Leng
+    notes: ["1", "2", "†"]
+  - name: Yu Feng
+    notes: ["1", "2", "†"]
+conference: ASPLOS 2026
+notes:
+  - symbol: "1"
+    text: Shanghai Jiao Tong University
+  - symbol: "2"
+    text: Shanghai Qi Zhi Institute
+  - symbol: "3"
+    text: Institute of Computing Technology, Chinese Academy of Sciences
+  # - symbol: "*"
+  #   text: Equal contribution
+  - symbol: "†"
+    text: Corresponding authors
+links:
+  # TODO: update the links after the paper is published
+  # - name: Paper
+  #   url: https://stonesix16.github.io/splatonic/paper.pdf
+  #   icon: ri:file-pdf-2-line
+  - name: Code
+    url: https://github.com/SJTU-MVCLab/Nebula
+    icon: ri:github-line
+  - name: arXiv
+    url: https://arxiv.org/abs/2512.20495
+    icon: academicons:arxiv
+
+# The color theme of the page. Defaults to "device" (the preference set in the user's brower or operating system). Setting this to "light" or "dark" will override the user's preference. This is useful if your figures only look good in one theme.
+theme: device
+
+# This is the icon that appears in the user's browser tab. To customize, change the favicon.svg file in /public/, or add your own file to /public/ and change the filename here.
+# favicon: favicon.svg
+
+# These keys are optional. If a link to your project page is in a Google search result, text message, or social media post, it will often appear as a "link preview card" based on its title, description, favicon, and thumbnail. After you publish your page, you can double check that these previews look right using [this tool](https://linkpreview.xyz/)
+# description: Simple project page template for your research paper, built with Astro and Tailwind
+# thumbnail: screenshot-light.png
+---
+
+import Video from "./components/Video.astro";
+import HighlightedSection from "./components/HighlightedSection.astro";
+import SmallCaps from "./components/SmallCaps.astro";
+import Figure from "./components/Figure.astro";
+import Picture from "./components/Picture.astro";
+import ModelViewer from "./components/ModelViewer.astro"
+import TwoColumns from "./components/TwoColumns.astro";
+import YouTubeVideo from "./components/YouTubeVideo.astro";
+import { Comparison } from "./components/Comparison.tsx";
+import { Carousel } from "./components/Carousel.tsx";
+
+import v_demo from "./assets/videos/demo.mp4";
+
+export const proj = <span className="italic">Nebula</span>;
+
+<Video src={v_demo} alt="demo" />
+
+
+<h2 className="center-h2">Abstract</h2>
+
+3D Gaussian splatting (3DGS) has drawn significant attention in the architectural community recently.
+However, current architectural designs often overlook the 3DGS scalability, making them fragile for extremely large-scale 3DGS.
+Meanwhile, the VR bandwidth requirement makes it impossible to deliver high-fidelity and smooth VR content from the cloud.
+
+We present {proj}, a coherent acceleration framework for large-scale 3DGS collaborative rendering. Instead of streaming videos, {proj} streams intermediate results after the LoD search, reducing 1925% data communication between the cloud and the client.
+To further enhance the motion-to-photon experience, we introduce a temporal-aware LoD search in the cloud that tames the irregular memory access and reduces redundant data access by exploiting temporal coherence across frames.
+On the client side, we propose a novel stereo rasterization that enables two eyes to share most computations during the stereo rendering with bit-accurate quality.
+With minimal hardware augmentations, {proj} achieves 2.7$\times$ motion-to-photon speedup and reduces 1925%
+bandwidth over lossy video streaming.
+
+{/* <h2 class="center-h2">Key Insights</h2>
+While large-scale 3DGS scenes exceed the memory capacity of VR devices, we find that the runtime memory demand varies drastically across stages of the 3DGS pipeline.
+Meanwhile, we also find that the set of Gaussians selected after LoD search exhibits a strong temporal similarity across adjacent frames.
+
+<TwoColumns>
+<Figure slot="left" maxWidth="40%">
+  <Picture slot="figure" src="../assets/images/memory_req.pdf" alt="The runtime memory demand across different stages." />
+  <Fragment slot="caption">The runtime memory demand across different stages.</Fragment>
+</Figure>
+<Figure slot="right" maxWidth="40%">
+  <Picture slot="figure" src="../assets/images/profile_overlap.pdf" alt="The temporal similarity between adjacent frames under a 90 FPS VR scenario." />
+
+  <Fragment slot="caption">Temporal similarity between adjacent frames.</Fragment>
+</Figure>
+</TwoColumns> */}
+
+<h2 className="center-h2">Contribution</h2>
+
+We introduce our collaborative rendering framework {proj}, which orchestrate the compute resources of both the cloud and the client.
+On the cloud side, we first perform the temporal-aware LoD search and update the Gaussian management system. 
+The cloud then compresses the Gaussians that need to be transmitted and sends them to the client over the network.
+On the client side, we first decompress the data upon arrival. 
+Meanwhile, the client continuously traverses the subgraph and the remaining stages of the 3DGS rendering.
+Once rendering completes, the new image is displayed at the next VSync arrival.
+
+<Figure>
+  <Picture slot="figure" src="../assets/images/execution_flow.pdf" alt="The timing diagram of our execution flow." invertInDarkMode />
+  <Fragment slot="caption">The timing diagram of our execution flow.</Fragment>
+</Figure>
+
+We specifically design the components in our framework to minimize the data communication and rendering latency.
+First, we propose a temporal-aware LoD search algorithm that exploits the temporal coherence across frames to reduce the redundant data access and mitigate the irregular memory access in the LoD search stage.
+Next, our runtime gaussian management system tracks Gaussians on the client side and only transmits the Gaussians that are necessary for rendering the current frame, significantly reducing the data communication between the cloud and the client.
+Lastly, we design a novel stereo rasterization algorithm that enables two eyes to share most computations during the stereo rendering with bit-accurate quality, further reducing the rendering latency on the client side.
+<Figure>
+  <Picture slot="figure" src="../assets/images/overview.pdf" alt="Overview of our Nebula framework." invertInDarkMode />
+  <Fragment slot="caption">Overview of Nebula.</Fragment>
+</Figure>
+
+The stereo rasterization algorithm leverage the stereo similarity between the two eyes and reuse the contribution of each Gaussian to both eyes to avoid the redundant preprocessing and $\alpha$-checking. 
+We further add architechtural support for stereo rasterization, which forwards the contribution of each Gaussian to the other eye and pipelines all rendering stages.
+
+<Figure>
+  <Picture slot="figure" src="../assets/images/stereo_rasterization.pdf" alt="Overview of stereo rasterization." invertInDarkMode />
+  <Fragment slot="caption">Overview of stereo rasterization.</Fragment>
+</Figure>
+
+<h2 className="center-h2">Results</h2>
+<h3 className="center-h3">Rendering Quality</h3>
+On the left figure, we report PSNR of rendered images under different stereo warping methods.
+On the right figure, we compares the visual quality and bandwidth of {proj} with conventional video streaming.
+We report PSNR on Replica and TUM datasets. 
+The results shows that our framework significantly reduce bandwidth requirements while maintaining visual quality.
+<TwoColumns>
+<Figure slot="left">
+  <Picture slot="figure" src="../assets/images/stereo_psnr.pdf" alt="PSNR comparison for stereo warping methods." />
+  <Fragment slot="caption">Quality evaluation of stereo warping methods.</Fragment>
+</Figure>
+<Figure slot="right">
+  <Picture slot="figure" src="../assets/images/compression_psnr.pdf" alt="PSNR and bandwidth comparison for compression methods." />
+  <Fragment slot="caption">Quality and bandwidth comparison of compression methods.</Fragment>
+</Figure>
+</TwoColumns>
+
+<h3 className="center-h3">Hardware Performance</h3>
+We evaluate the overall performance of our hardware with conventional methods and other architectures.
+Our architectural design significantly reduces the bandwidth requirement and achieves substantial speedup compared to conventional video streaming methods.
+
+<TwoColumns>
+  <Figure slot="left">
+    <Picture slot="figure" src="../assets/images/overall_speedup.pdf" alt="Overall Speedup Comparison. 'S': speedup; 'F': frame per second." />
+    <Fragment slot="caption">Overall speedup and fps comparison. "S": speedup; "F": frame per second.</Fragment>
+  </Figure>
+  <Figure slot="right">
+    <Picture slot="figure" src="../assets/images/overall_energy.pdf" alt="Overall Energy Comparison. 'E': energy; 'B': bandwidth." />
+    <Fragment slot="caption">Overall energy and bandwidth comparison. "E": energy; "B": bandwidth.</Fragment>
+  </Figure>
+</TwoColumns>
+
+import hier_tau3 from "./assets/videos/hier_tau3.mp4";
+import hier_tau9 from "./assets/videos/hier_tau9.mp4";
+import nebula_tau3 from "./assets/videos/nebula_tau3.mp4";
+import nebula_tau9 from "./assets/videos/nebula_tau9.mp4";
+
+<h2 className="center-h2">More videos</h2>
+
+We provide some GPU performance comparisons between **(left) Hierarchical Gaussian Splatting** and **(right) {proj}** to show strengths of our method in different scenarios.
+  <TwoColumns>
+    <Figure slot="left">
+      <Video slot="figure" src={hier_tau3} alt="hier_tau3" />
+    </Figure>
+    <Figure slot="right">
+      <Video slot="figure" src={nebula_tau3} alt="nebula_tau3" />
+    </Figure>
+  </TwoColumns>
+  <figcaption className="text-center mt-0">Comparison with tau=3.</figcaption>
+
+  <TwoColumns>
+    <Figure slot="left">
+      <Video slot="figure" src={hier_tau9} alt="hier_tau9" />
+    </Figure>
+    <Figure slot="right">
+      <Video slot="figure" src={nebula_tau9} alt="nebula_tau9" />
+    </Figure>
+  </TwoColumns>
+  <figcaption className="text-center mt-0">Comparison with tau=9.</figcaption>
+
+
+## BibTeX
+
+```bibtex
+@inproceedings{zhu2026nebula,
+  title={Nebula: Infinite-Scale 3D Gaussian Splatting in VR via Collaborative Rendering and Accelerated Stereo Rasterization},
+  author={Zhu, He and Liu, Zheng and Li, Xingyang and Wu, Anbang and Zhao, Jieru and Liu, Fangxin and Gan, Yiming and Leng, Jingwen and Feng, Yu},
+  booktitle={Proceedings of the 31st ACM International Conference on Architectural Support for Programming Languages and Operating Systems, Volume 2},
+  pages={1235--1250},
+  year={2026}
+}
+```
+
+## Acknowledgements
+
+We are sincerely grateful to Weikai Lin for providing valuable advice and support throughout this research.
+

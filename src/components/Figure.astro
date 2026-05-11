@@ -1,0 +1,21 @@
+---
+interface Props {
+  /** Flex ratios for [left, right] columns. Default [1, 1] for equal widths. */
+  maxWidth?: string;
+  children?: any;
+  slot?: string;
+}
+
+const { maxWidth = "100%" } = Astro.props;
+---
+
+<figure class="my-0">
+  <div class="flex w-full justify-center mb-0 my-0">
+    <div style={`max-width: ${maxWidth}; width: 100%`}>
+      <slot name="figure" />
+    </div>
+  </div>
+  <figcaption class="text-center mt-0">
+    <slot name="caption" />
+  </figcaption>
+</figure>
