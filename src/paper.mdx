@@ -139,11 +139,11 @@ We report PSNR on Replica and TUM datasets.
 The results shows that our framework significantly reduce bandwidth requirements while maintaining visual quality.
 <TwoColumns>
 <Figure slot="left">
-  <Picture slot="figure" src="../assets/images/stereo_psnr.pdf" alt="PSNR comparison for stereo warping methods." />
+  <Picture slot="figure" src="../assets/images/stereo_psnr.pdf" alt="PSNR comparison for stereo warping methods." invertInDarkMode/>
   <Fragment slot="caption">Quality evaluation of stereo warping methods.</Fragment>
 </Figure>
 <Figure slot="right">
-  <Picture slot="figure" src="../assets/images/compression_psnr.pdf" alt="PSNR and bandwidth comparison for compression methods." />
+  <Picture slot="figure" src="../assets/images/compression_psnr.pdf" alt="PSNR and bandwidth comparison for compression methods." invertInDarkMode/>
   <Fragment slot="caption">Quality and bandwidth comparison of compression methods.</Fragment>
 </Figure>
 </TwoColumns>
@@ -154,11 +154,11 @@ Our architectural design significantly reduces the bandwidth requirement and ach
 
 <TwoColumns>
   <Figure slot="left">
-    <Picture slot="figure" src="../assets/images/overall_speedup.pdf" alt="Overall Speedup Comparison. 'S': speedup; 'F': frame per second." />
+    <Picture slot="figure" src="../assets/images/overall_speedup.pdf" alt="Overall Speedup Comparison. 'S': speedup; 'F': frame per second." invertInDarkMode/>
     <Fragment slot="caption">Overall speedup and fps comparison. "S": speedup; "F": frame per second.</Fragment>
   </Figure>
   <Figure slot="right">
-    <Picture slot="figure" src="../assets/images/overall_energy.pdf" alt="Overall Energy Comparison. 'E': energy; 'B': bandwidth." />
+    <Picture slot="figure" src="../assets/images/overall_energy.pdf" alt="Overall Energy Comparison. 'E': energy; 'B': bandwidth." invertInDarkMode/>
     <Fragment slot="caption">Overall energy and bandwidth comparison. "E": energy; "B": bandwidth.</Fragment>
   </Figure>
 </TwoColumns>
@@ -173,20 +173,20 @@ import nebula_tau9 from "./assets/videos/nebula_tau9.mp4";
 We provide some GPU performance comparisons between **(left) Hierarchical Gaussian Splatting** and **(right) {proj}** to show strengths of our method in different scenarios.
   <TwoColumns>
     <Figure slot="left">
-      <Video slot="figure" src={hier_tau3} alt="hier_tau3" />
+      <Video slot="figure" src={hier_tau3} alt="hier_tau3" invertInDarkMode/>
     </Figure>
     <Figure slot="right">
-      <Video slot="figure" src={nebula_tau3} alt="nebula_tau3" />
+      <Video slot="figure" src={nebula_tau3} alt="nebula_tau3" invertInDarkMode/>
     </Figure>
   </TwoColumns>
   <figcaption className="text-center mt-0">Comparison with tau=3.</figcaption>
 
   <TwoColumns>
     <Figure slot="left">
-      <Video slot="figure" src={hier_tau9} alt="hier_tau9" />
+      <Video slot="figure" src={hier_tau9} alt="hier_tau9" invertInDarkMode/>
     </Figure>
     <Figure slot="right">
-      <Video slot="figure" src={nebula_tau9} alt="nebula_tau9" />
+      <Video slot="figure" src={nebula_tau9} alt="nebula_tau9" invertInDarkMode/>
     </Figure>
   </TwoColumns>
   <figcaption className="text-center mt-0">Comparison with tau=9.</figcaption>
